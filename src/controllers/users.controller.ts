@@ -10,22 +10,22 @@ import { get, param } from "@loopback/rest";
 
 export class UsersController {
   constructor(
-@repository(UserRepository.name) private userRepo: UserRepository
-) {}
+    @repository(UserRepository.name) private userRepo: UserRepository
+  ) { }
 
-@get('/users')
-async getAllUsers(): Promise<Array<Users>> {
-return await this.userRepo.find();
-}
+  @get('/users')
+  async getAllUsers(): Promise<Array<Users>> {
 
-@get('/user/{id}') 
-async getOneUser(
-  @param.query.string("id") id: string): Promise<Users[]> {
-return await this.userRepo.find({
-  where: {
-    user: id
+    return await this.userRepo.find();
   }
-});
 
+  @get('/user/{id}')
+  async getOneUser(
+    @param.query.string("id") id: string): Promise<Users[]> {
+    return await this.userRepo.find({
+      where: {
+        userId: id
+      }
+    });
   }
 }
