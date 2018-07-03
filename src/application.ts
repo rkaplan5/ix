@@ -1,17 +1,17 @@
-import {ApplicationConfig} from '@loopback/core';
-import {RestApplication, RestServer, RestBindings} from '@loopback/rest';
-import {MySequence} from './sequence';
+import { ApplicationConfig } from '@loopback/core';
+import { RestApplication, RestServer, RestBindings } from '@loopback/rest';
+import { MySequence } from './sequence';
 
 /* tslint:disable:no-unused-variable */
 // Binding and Booter imports are required to infer types for BootMixin!
-import {BootMixin, Booter, Binding} from '@loopback/boot';
+import { BootMixin, Booter, Binding } from '@loopback/boot';
 import { Class, Repository, juggler, RepositoryMixin } from '@loopback/repository';
 import { SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG } from 'constants';
 /* tslint:enable:no-unused-variable */
 
 export class IxApplication extends BootMixin(
   RepositoryMixin(RestApplication))
-  {
+{
   constructor(options?: ApplicationConfig) {
     super(options);
 
@@ -29,14 +29,18 @@ export class IxApplication extends BootMixin(
       },
     };
 
-     // use below for an in-memory database
+    // use below for an in-memory database
 
-     let dataSourceConfig = new juggler.DataSource({
-name: "db",
-connector: "memory"
-
-     });
-this.dataSource(dataSourceConfig);
+    let dataSourceConfig = new juggler.DataSource({
+      name: "db",
+      connector: "loopback-connector-mysql",
+      host: "127.0.0.1", //same as typing localhost
+      port: 3306,
+      database: 'project',
+      user: "root",
+      password: ""
+    });
+    this.dataSource(dataSourceConfig);
   }
 
   async start() {

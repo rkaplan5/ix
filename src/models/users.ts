@@ -1,7 +1,7 @@
 import { model, property, Entity } from "@loopback/repository";
 
 @model({
-    name: "users"
+    name: "cpt-user"//name of table on MySQL
 })
 export class Users extends Entity {
 
@@ -9,7 +9,7 @@ export class Users extends Entity {
         type: "number",
         id: true
     })
-    userId: number;
+    id: number; // names in blue need to match the column names on MySQL
 
     @property({
         type: "string"
@@ -36,5 +36,7 @@ export class Users extends Entity {
     })
     phoneNumber: string;
 
-
+    getId() {
+        return this.id;
+    }
 }

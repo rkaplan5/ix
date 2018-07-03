@@ -15,25 +15,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_repository_1 = require("../repositories/users.repository");
 const repository_1 = require("@loopback/repository");
 const rest_1 = require("@loopback/rest");
-// Uncomment these imports to begin using these cool features!
+const users_1 = require("../models/users");
 // import {inject} from '@loopback/context';
 let LoginController = class LoginController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async LogIn(email) {
-        return await this.userRepo.find({
+    async LogIn(user) {
+        // Check that email and password are both supplied
+        if (!user.email || !user.password) {
+            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+        }
+        // Check that email and password are valid
+        let userExists = !!(await this.userRepo.count({
+            and: [
+                { email: user.email },
+                { password: user.password },
+            ],
+        }));
+        if (!userExists) {
+            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+        }
+        return await this.userRepo.findOne({
             where: {
-                email
-            }
+                and: [
+                    { email: user.email },
+                    { password: user.password }
+                ],
+            },
         });
     }
 };
 __decorate([
-    rest_1.get("/login"),
-    __param(0, rest_1.param.query.string("email")),
+    rest_1.post("/login"),
+    __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [users_1.Users]),
     __metadata("design:returntype", Promise)
 ], LoginController.prototype, "LogIn", null);
 LoginController = __decorate([
@@ -41,4 +58,15 @@ LoginController = __decorate([
     __metadata("design:paramtypes", [users_repository_1.UserRepository])
 ], LoginController);
 exports.LoginController = LoginController;
+// }
+// @param.query.string("email") email: string
+//  ): Promise<Array<Users>> {
+//
+//    return await this.userRepo.find({
+//      where: {
+//        email
+//      }
+//    })
+//  }
+// }
 //# sourceMappingURL=login.controller.js.map

@@ -22,20 +22,28 @@ let RegistrationController = class RegistrationController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async createUser(user) {
-        let createdUser = await this.userRepo.create(user);
-        return createdUser;
+    async registerUser(user) {
+        // Check that required fields are supplied
+        if (!user.email || !user.password) {
+            throw new rest_1.HttpErrors.BadRequest('missing data');
+        }
+        // Check that user does not already exist
+        let userExists = !!(await this.userRepo.count({ email: user.email }));
+        if (userExists) {
+            throw new rest_1.HttpErrors.BadRequest('user already exists');
+        }
+        return await this.userRepo.create(user);
     }
 };
 __decorate([
-    rest_1.post("/registration"),
+    rest_1.post('/registration'),
     __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [users_1.Users]),
     __metadata("design:returntype", Promise)
-], RegistrationController.prototype, "createUser", null);
+], RegistrationController.prototype, "registerUser", null);
 RegistrationController = __decorate([
-    __param(0, repository_1.repository(users_repository_1.UserRepository.name)),
+    __param(0, repository_1.repository(users_repository_1.UserRepository)),
     __metadata("design:paramtypes", [users_repository_1.UserRepository])
 ], RegistrationController);
 exports.RegistrationController = RegistrationController;

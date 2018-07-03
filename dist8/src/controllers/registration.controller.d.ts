@@ -1,7 +1,7 @@
 import { UserRepository } from "../repositories/users.repository";
 import { Users } from "../models/users";
 export declare class RegistrationController {
-    private userRepo;
+    protected userRepo: UserRepository;
     constructor(userRepo: UserRepository);
-    createUser(user: Users): Promise<Users>;
+    registerUser(user: Users): Promise<Users>;
 }

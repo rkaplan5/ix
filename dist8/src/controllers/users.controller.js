@@ -17,19 +17,20 @@ const users_repository_1 = require("../repositories/users.repository");
 const rest_1 = require("@loopback/rest");
 // Uncomment these imports to begin using these cool features!
 // import {inject} from '@loopback/context';
-let UsersController = class UsersController {
+let UserController = class UserController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async getAllUsers() {
+    async findUsers() {
         return await this.userRepo.find();
     }
-    async getOneUser(id) {
-        return await this.userRepo.find({
-            where: {
-                user: id
-            }
-        });
+    async findUsersById(id) {
+        // Check for valid ID
+        let userExists = !!(await this.userRepo.count({ id }));
+        if (!userExists) {
+            throw new rest_1.HttpErrors.BadRequest(`user ID ${id} does not exist`);
+        }
+        return await this.userRepo.findById(id);
     }
 };
 __decorate([
@@ -37,17 +38,17 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "getAllUsers", null);
+], UserController.prototype, "findUsers", null);
 __decorate([
-    rest_1.get('/user/{id}'),
-    __param(0, rest_1.param.query.number("id")),
+    rest_1.get('/users/{id}'),
+    __param(0, rest_1.param.path.number('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "getOneUser", null);
-UsersController = __decorate([
-    __param(0, repository_1.repository(users_repository_1.UserRepository.name)),
+], UserController.prototype, "findUsersById", null);
+UserController = __decorate([
+    __param(0, repository_1.repository(users_repository_1.UserRepository)),
     __metadata("design:paramtypes", [users_repository_1.UserRepository])
-], UsersController);
-exports.UsersController = UsersController;
+], UserController);
+exports.UserController = UserController;
 //# sourceMappingURL=users.controller.js.map

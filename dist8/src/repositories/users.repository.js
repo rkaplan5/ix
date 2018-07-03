@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const repository_1 = require("@loopback/repository");
 const users_1 = require("../models/users");
-const loopback_datasource_juggler_1 = require("loopback-datasource-juggler");
 const core_1 = require("@loopback/core");
 let UserRepository = class UserRepository extends repository_1.DefaultCrudRepository {
     constructor(datasource) {
@@ -24,7 +23,7 @@ let UserRepository = class UserRepository extends repository_1.DefaultCrudReposi
 };
 UserRepository = __decorate([
     __param(0, core_1.inject('datasources.db')),
-    __metadata("design:paramtypes", [loopback_datasource_juggler_1.DataSource])
+    __metadata("design:paramtypes", [repository_1.juggler.DataSource])
 ], UserRepository);
 exports.UserRepository = UserRepository;
 //# sourceMappingURL=users.repository.js.map
