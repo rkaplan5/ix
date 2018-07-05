@@ -23,6 +23,7 @@ class IxApplication extends boot_1.BootMixin(repository_1.RepositoryMixin(rest_1
             },
         };
         // use below for an in-memory database
+        //
         let dataSourceConfig = new repository_1.juggler.DataSource({
             name: "db",
             connector: "loopback-connector-mysql",
@@ -30,7 +31,7 @@ class IxApplication extends boot_1.BootMixin(repository_1.RepositoryMixin(rest_1
             port: 3306,
             database: 'project',
             user: "root",
-            password: ""
+            password: "" // same as on MYSQL
         });
         this.dataSource(dataSourceConfig);
     }

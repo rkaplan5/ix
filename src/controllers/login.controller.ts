@@ -41,15 +41,3 @@ export class LoginController {
 }
 
 
- // }
-   // @param.query.string("email") email: string
-//  ): Promise<Array<Users>> {
-//
-//    return await this.userRepo.find({
-//      where: {
-//        email
-//      }
-//    })
-//  }
-// }
-

@@ -58,15 +58,4 @@ LoginController = __decorate([
     __metadata("design:paramtypes", [users_repository_1.UserRepository])
 ], LoginController);
 exports.LoginController = LoginController;
-// }
-// @param.query.string("email") email: string
-//  ): Promise<Array<Users>> {
-//
-//    return await this.userRepo.find({
-//      where: {
-//        email
-//      }
-//    })
-//  }
-// }
 //# sourceMappingURL=login.controller.js.map

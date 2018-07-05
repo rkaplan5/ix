@@ -30,15 +30,16 @@ export class IxApplication extends BootMixin(
     };
 
     // use below for an in-memory database
+    //
 
     let dataSourceConfig = new juggler.DataSource({
       name: "db",
-      connector: "loopback-connector-mysql",
+      connector: "loopback-connector-mysql", // find this in package.JSON
       host: "127.0.0.1", //same as typing localhost
       port: 3306,
-      database: 'project',
+      database: 'project', // same name as Mysql parent of the table name
       user: "root",
-      password: ""
+      password: "" // same as on MYSQL
     });
     this.dataSource(dataSourceConfig);
   }
