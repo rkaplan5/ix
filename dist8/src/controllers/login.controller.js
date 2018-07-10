@@ -16,14 +16,26 @@ const users_repository_1 = require("../repositories/users.repository");
 const repository_1 = require("@loopback/repository");
 const rest_1 = require("@loopback/rest");
 const users_1 = require("../models/users");
+const jsonwebtoken_1 = require("jsonwebtoken");
 // import {inject} from '@loopback/context';
 let LoginController = class LoginController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async LogIn(user) {
+    //log in
+    verifyToken(jwt) {
+        try {
+            let payload = jsonwebtoken_1.verify(jwt, "shh");
+            return payload;
+        }
+        catch (err) {
+            throw new rest_1.HttpErrors.Unauthorized("invalid token");
+        }
+    }
+    // the user is then authenitated and then can proceed
+    async loginUser(user) {
         // Check that email and password are both supplied
-        if (!user.email || !user.password) {
+        if (!user.email || !user.password) { // ! means if doesnt exist its wrong
             throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
         }
         // Check that email and password are valid
@@ -36,7 +48,7 @@ let LoginController = class LoginController {
         if (!userExists) {
             throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
         }
-        return await this.userRepo.findOne({
+        let foundUser = await this.userRepo.findOne({
             where: {
                 and: [
                     { email: user.email },
@@ -44,15 +56,38 @@ let LoginController = class LoginController {
                 ],
             },
         });
+        // makes log in secure
+        let jwt = jsonwebtoken_1.sign({
+            user: {
+                id: foundUser.id,
+                email: foundUser.email
+            }
+        }, 
+        // password that only API knows.
+        "shh", {
+            issuer: "auth.ix.co.za",
+            audience: 'ix.co.za'
+        });
+        return {
+            token: jwt,
+        };
     }
 };
 __decorate([
-    rest_1.post("/login"),
+    rest_1.get("/verify"),
+    __param(0, rest_1.param.query.string("jwt")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], LoginController.prototype, "verifyToken", null);
+__decorate([
+    rest_1.post("/login") // log in end point
+    ,
     __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [users_1.Users]),
     __metadata("design:returntype", Promise)
-], LoginController.prototype, "LogIn", null);
+], LoginController.prototype, "loginUser", null);
 LoginController = __decorate([
     __param(0, repository_1.repository(users_repository_1.UserRepository.name)),
     __metadata("design:paramtypes", [users_repository_1.UserRepository])
