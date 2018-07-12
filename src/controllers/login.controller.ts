@@ -25,8 +25,6 @@ export class LoginController {
 
   // need to create a "sign" which checks the JWT
 
-
-
   @post("/login") // log in end point
   async loginUser(@requestBody() user: Users) {
     // Check that both email or password are filled in on log in screen
