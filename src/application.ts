@@ -13,7 +13,12 @@ export class IxApplication extends BootMixin(
   RepositoryMixin(RestApplication))
 {
   constructor(options?: ApplicationConfig) {
-    super(options);
+    super(
+      {
+        rest: {
+          port: process.env.PORT || 3000
+        }
+      });
 
     // Set up the custom sequence
     this.sequence(MySequence);
@@ -30,16 +35,16 @@ export class IxApplication extends BootMixin(
     };
 
     // use below for an in-memory database
-    //
 
     let dataSourceConfig = new juggler.DataSource({
       name: "db",
-      connector: "loopback-connector-mysql", // find this in package.JSON
-      host: "127.0.0.1", //same as typing localhost
-      port: 3306,
-      database: 'project', // same name as Mysql parent of the table name
-      user: "root",
-      password: "" // same as on MYSQL
+      connector: "memory"
+      // connector: "loopback-connector-mysql", // find this in package.JSON
+      // host: "127.0.0.1", //same as typing localhost
+      // port: 3306,
+      // database: 'project', // same name as Mysql parent of the table name
+      // user: "root",
+      // password: "" // same as on MYSQL
     });
     this.dataSource(dataSourceConfig);
   }

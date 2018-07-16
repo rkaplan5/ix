@@ -1,8 +1,9 @@
 import { repository } from "@loopback/repository";
 import { UserRepository } from "../repositories/users.repository";
 import { Users } from "../models/users";
-import { get, param, HttpErrors } from "@loopback/rest";
+import { get, param, HttpErrors, put, requestBody } from "@loopback/rest";
 import { sign, verify } from 'jsonwebtoken'
+let bcrypt = require('bcrypt'); // old style
 
 // Uncomment these imports to begin using these cool features!
 
@@ -37,4 +38,23 @@ export class UserController {
 
     return await this.userRepo.findById(id);
   }
+
+  // changing a password - need to make a front end for this.
+  /*
+  @put("/users/{id}")
+  async updatePassword(
+    @param.path.string('id') id: string,
+    @requestBody() bodyData: any
+  ) {
+    console.log(id);
+    console.log(bodyData);
+
+    if (!bodyData.oldPassword) {
+      throw new HttpErrors.BadRequest("I need an old password");
+    }
+    let user this.userRepo.findById(id);
+
+    bcrypt.compare
+  }
+  */
 }
