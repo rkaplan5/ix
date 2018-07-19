@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@loopback/core';
+import { ApplicationConfig, MethodParameterDecoratorFactory } from '@loopback/core';
 import { RestApplication, RestServer, RestBindings } from '@loopback/rest';
 import { MySequence } from './sequence';
 
@@ -34,21 +34,38 @@ export class IxApplication extends BootMixin(
       },
     };
 
-    // use below for an in-memory database
+
 
     let dataSourceConfig = new juggler.DataSource({
       name: "db",
-      connector: "memory"
-      // connector: "loopback-connector-mysql", // find this in package.JSON
-      // host: "127.0.0.1", //same as typing localhost
-      // port: 3306,
-      // database: 'project', // same name as Mysql parent of the table name
-      // user: "root",
-      // password: "" // same as on MYSQL
-    });
-    this.dataSource(dataSourceConfig);
-  }
+      // use below for an in-memory database
+      //connector: "memory",
 
+      //The below is if we are using MYSQl and loopback to build the app, comment out when changing to Heroku.
+      connector: "loopback-connector-mysql", // find this in package.JSON
+      host: "127.0.0.1", //same as typing localhost
+      port: 3306,
+      database: 'project', // same name as Mysql parent of the table name
+      user: "root",
+      password: "" // same as on MYSQL
+    })
+    this.dataSource(dataSourceConfig);
+
+    // Use below for MySQL database
+    /*
+        var dataSourceConfig = new juggler.DataSource({
+          name: "db",
+          connector: "loopback-connector-mysql",
+          host: process.env.DB_HOST,
+          port: process.env.DB_PORT,
+          user: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          database: process.env.DB_DATABASE
+        });
+        this.dataSource(dataSourceConfig);
+      }
+    */
+  }
   async start() {
     await super.start();
 

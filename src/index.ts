@@ -1,7 +1,8 @@
-import {IxApplication} from './application';
-import {ApplicationConfig} from '@loopback/core';
+import { IxApplication } from './application';
+import { ApplicationConfig } from '@loopback/core';
 
-export {IxApplication};
+
+export { IxApplication };
 
 export async function main(options?: ApplicationConfig) {
   const app = new IxApplication(options);
