@@ -17,6 +17,7 @@ const repository_1 = require("@loopback/repository");
 const rest_1 = require("@loopback/rest");
 const users_1 = require("../models/users");
 const jsonwebtoken_1 = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 // import {inject} from '@loopback/context';
 let LoginController = class LoginController {
     constructor(userRepo) {
@@ -43,7 +44,6 @@ let LoginController = class LoginController {
         let userExists = !!(await this.userRepo.count({
             and: [
                 { email: user.email },
-                { password: user.password },
             ],
         }));
         if (!userExists) {
@@ -52,17 +52,17 @@ let LoginController = class LoginController {
         // create a founduser object and fetch all their data.
         let foundUser = await this.userRepo.findOne({
             where: {
-                and: [
-                    { email: user.email },
-                    { password: user.password }
-                ],
+                email: user.email
             },
         });
-        // give a JWT access token to founduser as they passed security
+        // this is so we can decrypt the bcrypt password
+        if (!(await bcrypt.compare(user.password, foundUser.password))) {
+            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+        }
         let jwt = jsonwebtoken_1.sign({
             user: {
-                id: foundUser.id,
-                email: foundUser.email
+                user_id: foundUser.user_id,
+                email: foundUser.email,
             }
         }, 
         // the password here is the signature.
@@ -70,7 +70,6 @@ let LoginController = class LoginController {
             issuer: "auth.ix.co.za",
             audience: 'ix.co.za'
         });
-        // return the jwt which is the data and the password.
         return {
             token: jwt,
         };
