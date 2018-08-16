@@ -34,7 +34,6 @@ let LoginController = class LoginController {
         }
     }
     // the user is then authenitated and then can proceed
-    // need to create a "sign" which checks the JWT
     async loginUser(user) {
         // Check that both email or password are filled in on log in screen
         if (!user.email || !user.password) { // ! means if doesnt exist its wrong
@@ -71,7 +70,7 @@ let LoginController = class LoginController {
             audience: 'ix.co.za'
         });
         return {
-            token: jwt,
+            token: jwt
         };
     }
 };

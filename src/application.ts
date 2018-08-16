@@ -50,21 +50,21 @@ export class IxApplication extends BootMixin(
       password: "" // same as on MYSQL
     })
     this.dataSource(dataSourceConfig);
-
-    // Use below for MySQL database
     /*
-        var dataSourceConfig = new juggler.DataSource({
-          name: "db",
-          connector: "loopback-connector-mysql",
-          host: process.env.DB_HOST,
-          port: process.env.DB_PORT,
-          user: process.env.DB_USER,
-          password: process.env.DB_PASSWORD,
-          database: process.env.DB_DATABASE
-        });
-        this.dataSource(dataSourceConfig);
-      }
-    */
+    // Use below for MySQL database
+
+    var dataSourceConfig = new juggler.DataSource({
+      name: "db",
+      connector: "loopback-connector-mysql",
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE
+    })
+    this.dataSource(dataSourceConfig);
+  }
+*/
   }
   async start() {
     await super.start();
